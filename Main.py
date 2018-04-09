@@ -1,6 +1,6 @@
 import pygame
 from Constant import *
-from Mob import Demon
+from Mob import *
 from Player import *
 from pygame.locals import *
 from Arrow import *
@@ -25,6 +25,8 @@ class Main():
             # Передвижение игрока, при нажатии клавиши
             elif event.type == USEREVENT+1:
                 self.player.tick()
+            elif event.type == USEREVENT+2:
+                self.mobs[0].random_moove()
             elif event.type == KEYDOWN:
                 if event.key == K_RIGHT:
                     self.player.mooving = [1, 0, 0, 0]
@@ -56,7 +58,7 @@ class Main():
                     self.player.mooving[LEFT] = 0
 
     def add_demon(self, x, y):
-        self.mobs.append(Demon(self, x, y, LEFT))
+        self.mobs.append(Demon(self, x, y, UP))
 
     def render(self):  # прорисовка
         self.screen.blit(self.background, (0, 0))
@@ -69,13 +71,17 @@ class Main():
         pygame.display.flip()
 
     def main_loop(self):  # основной цикл программ
-        pygame.time.set_timer(USEREVENT+1, 100)
-        self.add_demon(300, 200)
+        pygame.time.set_timer(USEREVENT + 1, 100)
+        pygame.time.set_timer(USEREVENT + 2, 1000)
+        self.add_demon(300, 250)
+        self.mobs[0].mooving[LEFT] = 1
         while self.running == True:
             self.timer.tick(66)
             if self.player.state != DEAD:
                 self.player.moove()
             for i in self.projective:
+                i.moove()
+            for i in self.mobs:
                 i.moove()
             # print(self.projective)
             self.render()

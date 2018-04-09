@@ -33,6 +33,9 @@ class Projective():
     def remove(self):
         self.game.projective.remove(self)
 
+    def __str__(self):
+        return (self.x, self.y)
+
 
 class Arrow(Projective):
 
@@ -40,3 +43,6 @@ class Arrow(Projective):
         self.image = 'pic/arrow.png'
         self.speed = 5
         Projective.__init__(self, game, x_start, y_start, dir, self.image)
+
+    def __str__(self):
+        Projective.__str__(self)

@@ -15,6 +15,8 @@ class Player():
         self.name = name
         self.hp = MAX_HP
         self.mp = MAX_MP
+        self.size = 60
+        self.blocked = [0, 0, 0, 0]
         self.mooving = [0, 0, 0, 0]
         self.image_pack = ['pic/archerr.png', 'pic/archerd.png', 'pic/archerl.png', 'pic/archeru.png']
         self.images = []
@@ -28,23 +30,38 @@ class Player():
             self.images.append(i)
 
     def moove(self):
-        if self.mooving[RIGHT] == 1:
+        self.block_check()
+        if self.mooving[RIGHT] == 1 and self.blocked[RIGHT] == 0:
             self.direction = RIGHT
             self.x += PLAYER_SPEED
-        if self.mooving[DOWN] == 1:
+        if self.mooving[DOWN] == 1 and self.blocked[DOWN] == 0:
             self.direction = DOWN
             self.y += PLAYER_SPEED
-        if self.mooving[LEFT] == 1:
+        if self.mooving[LEFT] == 1 and self.blocked[LEFT] == 0:
             self.direction = LEFT
-            self.x += PLAYER_SPEED
-        if self.mooving[UP] == 1:
+            self.x -= PLAYER_SPEED
+        if self.mooving[UP] == 1 and self.blocked[UP] == 0:
             self.direction = UP
-            self.y += PLAYER_SPEED
+            self.y -= PLAYER_SPEED
 
-        if self.x <= 0: self.x = 0
-        if self.y <= 0: self.y = 0
-        if self.x >= SCREEN_WIDTH - 60: self.x = SCREEN_WIDTH-60
-        if self.y >= SCREEN_HEIGHT - 64: self.y = SCREEN_HEIGHT-64
+    def block_check(self):
+        self.blocked = [0, 0, 0, 0]
+        for i in self.game.mobs:
+            self.contact_check(i)
+        if self.x <= 0: self.blocked[LEFT] = 1
+        if self.y <= 0: self.blocked[UP] = 1
+        if self.x >= SCREEN_WIDTH - 60: self.blocked[RIGHT] = 1
+        if self.y >= SCREEN_HEIGHT - 64: self.blocked[DOWN] = 1
+
+    def contact_check(self, obj):
+        if self.x >= obj.x - self.size and self.y <= obj.y + obj.size-SIZE_DIF and self.y >= obj.y - obj.size+SIZE_DIF and self.x <= obj.x + obj.size/2:
+            self.blocked[RIGHT] = 1
+        if self.x <= obj.x - self.size and self.y <= obj.y + obj.size-SIZE_DIF and self.y >= obj.y - obj.size+SIZE_DIF and self.x >= obj.x:
+            self.blocked[LEFT] = 1
+        if self.y >= obj.y - self.size and self.x <= obj.x + obj.size-SIZE_DIF and self.x >= obj.x - obj.size+SIZE_DIF and self.y <= obj.y + obj.size/2:
+            self.blocked[DOWN] = 1
+        if self.y <= obj.y - self.size and self.x <= obj.x + obj.size-SIZE_DIF and self.x >= obj.x - obj.size+SIZE_DIF and self.y >= obj.y:
+            self.blocked[UP] = 1
 
     def render(self, screen):
         screen.blit(self.images[self.direction][self.state], (self.x, self.y))
