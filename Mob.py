@@ -52,14 +52,33 @@ class Mob():
 
     def block_check(self):
         self.blocked = [0, 0, 0, 0]
+        for i in self.game.mobs:
+            if self.x != i.x and self.y != i.y:
+                self.contact_check(i)
+        self.contact_check(self.game.player)
         if self.x <= 0: self.blocked[LEFT] = 1
         if self.y <= 0: self.blocked[UP] = 1
         if self.x >= SCREEN_WIDTH - 60: self.blocked[RIGHT] = 1
         if self.y >= SCREEN_HEIGHT - 64: self.blocked[DOWN] = 1
 
+    def contact_check(self, obj):
+        if self.x >= obj.x - self.size and self.y <= obj.y + obj.size-SIZE_DIF and self.y >= obj.y - obj.size+SIZE_DIF and self.x <= obj.x + SIZE_DIF*2:
+            self.blocked[RIGHT] = 1
+        if self.x <= obj.x + obj.size + SIZE_DIF and self.y <= obj.y + obj.size-SIZE_DIF and self.y >= obj.y - obj.size+SIZE_DIF and self.x >= obj.x + obj.size - SIZE_DIF*2:
+            self.blocked[LEFT] = 1
+        if self.y >= obj.y - self.size and self.x <= obj.x + obj.size-SIZE_DIF and self.x >= obj.x - obj.size+SIZE_DIF and self.y <= obj.y + SIZE_DIF*2:
+            self.blocked[DOWN] = 1
+        if self.y <= obj.y + obj.size + SIZE_DIF and self.x <= obj.x + obj.size-SIZE_DIF and self.x >= obj.x - obj.size+SIZE_DIF and self.y >= obj.y + obj.size - SIZE_DIF*2:
+            self.blocked[UP] = 1
+
     def random_moove(self):
-        self.mooving = [0, 0, 0, 0]
-        self.mooving[random.randint(0, 3)] = 1
+        if self.blocked != [0, 0, 0, 0]:
+            self.change_moove(random.randint(0, 3))
+
+    def change_moove(self, direction):
+        self.mooving = [0, 0,  0, 0]
+        if 0 <= direction <= 3:
+            self.mooving[direction] = 1
 
 class Demon(Mob):
     def __init__(self, game, x_start, y_start, dir):

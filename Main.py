@@ -1,4 +1,5 @@
 import pygame
+import _random
 from Constant import *
 from Mob import *
 from Player import *
@@ -26,7 +27,8 @@ class Main():
             elif event.type == USEREVENT+1:
                 self.player.tick()
             elif event.type == USEREVENT+2:
-                self.mobs[0].random_moove()
+                for i in self.mobs:
+                    i.random_moove()
             elif event.type == KEYDOWN:
                 if event.key == K_RIGHT:
                     self.player.mooving = [1, 0, 0, 0]
@@ -59,6 +61,7 @@ class Main():
 
     def add_demon(self, x, y):
         self.mobs.append(Demon(self, x, y, UP))
+        self.mobs[-1].mooving = [0, 0, 0, 1]
 
     def render(self):  # прорисовка
         self.screen.blit(self.background, (0, 0))
@@ -70,20 +73,25 @@ class Main():
             i.render(screen)
         pygame.display.flip()
 
+    def moove(self):
+        # moove of all objects
+        if self.player.state != DEAD:
+            self.player.moove()
+        for i in self.projective:
+            i.moove()
+        for i in self.mobs:
+            if i.state != DEAD:
+                i.moove()
+
+
     def main_loop(self):  # основной цикл программ
         pygame.time.set_timer(USEREVENT + 1, 100)
         pygame.time.set_timer(USEREVENT + 2, 1000)
-        self.add_demon(300, 250)
-        self.mobs[0].mooving[LEFT] = 1
+        for i in range(5):
+            self.add_demon(random.randint(0, SCREEN_WIDTH - 64), random.randint(0, SCREEN_HEIGHT - 64))
         while self.running == True:
             self.timer.tick(66)
-            if self.player.state != DEAD:
-                self.player.moove()
-            for i in self.projective:
-                i.moove()
-            for i in self.mobs:
-                i.moove()
-            # print(self.projective)
+            self.moove()
             self.render()
             self.handle_events()
 

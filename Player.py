@@ -15,7 +15,7 @@ class Player():
         self.name = name
         self.hp = MAX_HP
         self.mp = MAX_MP
-        self.size = 60
+        self.size = 48
         self.blocked = [0, 0, 0, 0]
         self.mooving = [0, 0, 0, 0]
         self.image_pack = ['pic/archerr.png', 'pic/archerd.png', 'pic/archerl.png', 'pic/archeru.png']
@@ -54,13 +54,13 @@ class Player():
         if self.y >= SCREEN_HEIGHT - 64: self.blocked[DOWN] = 1
 
     def contact_check(self, obj):
-        if self.x >= obj.x - self.size and self.y <= obj.y + obj.size-SIZE_DIF and self.y >= obj.y - obj.size+SIZE_DIF and self.x <= obj.x + obj.size/2:
+        if self.x >= obj.x - self.size and self.y <= obj.y + obj.size-SIZE_DIF and self.y >= obj.y - obj.size+SIZE_DIF and self.x <= obj.x + SIZE_DIF*2:
             self.blocked[RIGHT] = 1
-        if self.x <= obj.x - self.size and self.y <= obj.y + obj.size-SIZE_DIF and self.y >= obj.y - obj.size+SIZE_DIF and self.x >= obj.x:
+        if self.x <= obj.x + obj.size + SIZE_DIF and self.y <= obj.y + obj.size-SIZE_DIF and self.y >= obj.y - obj.size+SIZE_DIF and self.x >= obj.x + obj.size - SIZE_DIF*2:
             self.blocked[LEFT] = 1
-        if self.y >= obj.y - self.size and self.x <= obj.x + obj.size-SIZE_DIF and self.x >= obj.x - obj.size+SIZE_DIF and self.y <= obj.y + obj.size/2:
+        if self.y >= obj.y - self.size and self.x <= obj.x + obj.size-SIZE_DIF and self.x >= obj.x - obj.size+SIZE_DIF and self.y <= obj.y + SIZE_DIF*2:
             self.blocked[DOWN] = 1
-        if self.y <= obj.y - self.size and self.x <= obj.x + obj.size-SIZE_DIF and self.x >= obj.x - obj.size+SIZE_DIF and self.y >= obj.y:
+        if self.y <= obj.y + obj.size + SIZE_DIF and self.x <= obj.x + obj.size-SIZE_DIF and self.x >= obj.x - obj.size+SIZE_DIF and self.y >= obj.y + obj.size - SIZE_DIF*2:
             self.blocked[UP] = 1
 
     def render(self, screen):
