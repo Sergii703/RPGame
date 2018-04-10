@@ -63,7 +63,7 @@ class Main():
         self.mobs.append(Demon(self, x, y, UP))
         self.mobs[-1].mooving = [0, 0, 0, 1]
 
-    def render(self):  # прорисовка
+    def render(self):  # прорисовк
         self.screen.blit(self.background, (0, 0))
         self.player.render(screen)
         self.player.render_ui(screen)
