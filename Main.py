@@ -6,6 +6,7 @@ from Player import *
 from pygame.locals import *
 from Arrow import *
 
+
 class Main():
     def __init__(self, screen):
         # self.name = name
@@ -13,6 +14,7 @@ class Main():
         self.player = Player(self, 'Geroes')
         self.projective = []
         self.mobs = []
+        self.corpses = []
         self.background = pygame.image.load('pic/black.jpg')
         self.timer = pygame.time.Clock()
         self.running = True
@@ -42,7 +44,7 @@ class Main():
             # Другие действия игрока
                 if event.key == K_SPACE:
                     if self.player.state != DEAD:
-                        self.player.die()
+                        self.player.kill()
                     else:
                         self.player.state = ALIVE
                 if event.key == K_z:
@@ -60,11 +62,13 @@ class Main():
                     self.player.mooving[LEFT] = 0
 
     def add_demon(self, x, y):
-        self.mobs.append(Demon(self, x, y, UP))
-        self.mobs[-1].mooving = [0, 0, 0, 1]
+        self.mobs.append(Demon(self, x, y, UP))  # добаление демонов
+        self.mobs[-1].mooving = [0, 0, 0, 1]  # движение демонов
 
     def render(self):  # прорисовк
         self.screen.blit(self.background, (0, 0))
+        for i in self.corpses:
+            i.render(screen)
         self.player.render(screen)
         self.player.render_ui(screen)
         for i in self.projective:
