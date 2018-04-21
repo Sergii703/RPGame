@@ -1,8 +1,5 @@
 import random
-
 import pygame
-
-from Arrow import Arrow, Projective
 from Constant import *
 from Arrow import *
 from Character import *
