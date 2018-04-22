@@ -1,25 +1,24 @@
+# -*- coding: utf-8 -*-
 import pygame
-import _random
-from Constant import *
 from Mob import *
 from Player import *
 from pygame.locals import *
-from Arrow import *
+from Local_Button import *
 
 
 class Main():
     def __init__(self, screen):
-        # self.name = name
         self.screen = screen
         self.player = Player(self, 'Geroes')
         self.projective = []
         self.mobs = []
         self.corpses = []
+        self.buttons = []
         self.background = pygame.image.load('pic/black.jpg')
         self.timer = pygame.time.Clock()
         self.running = True
+        self.buttons.append(ButtonAddDemon(0, 0, 'Add_Demons', self))
         self.main_loop()
-        pass
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -60,6 +59,11 @@ class Main():
                     self.player.mooving[RIGHT] = 0
                 if event.key == K_LEFT:
                     self.player.mooving[LEFT] = 0
+            # При нажатии кнопки мыши
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    for i in self.buttons:
+                        i.click_check(event.pos[0], event.pos[1])
 
     def add_demon(self, x, y):
         self.mobs.append(Demon(self, x, y, UP))  # добаление демонов
@@ -87,12 +91,9 @@ class Main():
             if i.state != DEAD:
                 i.moove()
 
-
     def main_loop(self):  # основной цикл программ
         pygame.time.set_timer(USEREVENT + 1, 100)
         pygame.time.set_timer(USEREVENT + 2, 1000)
-        for i in range(5):
-            self.add_demon(random.randint(0, SCREEN_WIDTH - 64), random.randint(0, SCREEN_HEIGHT - 64))
         while self.running == True:
             self.timer.tick(66)
             self.moove()

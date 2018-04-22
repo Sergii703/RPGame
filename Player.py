@@ -1,7 +1,3 @@
-import pygame
-
-from Arrow import Arrow
-from Constant import *
 from Character import *
 
 

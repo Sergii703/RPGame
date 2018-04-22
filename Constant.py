@@ -28,3 +28,5 @@ SIZE_DIF = 3
 SKILL1_COST = 20
 
 PLAYER_IMAGE_PACK = ['pic/archerr.png', 'pic/archerd.png', 'pic/archerl.png', 'pic/archeru.png']
+
+

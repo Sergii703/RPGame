@@ -1,7 +1,3 @@
-import random
-import pygame
-from Constant import *
-from Arrow import *
 from Character import *
 
 
